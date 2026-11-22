@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SEREN — Luxury Island Resort in Motu Tevairoa, Bora Bora, French Polynesia. Experience unhurried ocean sanctuaries, private overwater villas, and guided reef immersions." />
+  <title>SEREN — Luxury Island Resort | Bora Bora</title>
+
+  <!-- Google Fonts strictly matching Stitch template tokens -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body class="bg-surface font-body text-body-md">
+
+  <!-- Top Scroll Progress Line -->
+  <div id="scroll-progress-bar" aria-hidden="true"></div>
+
+  <!-- Luxury Preloader -->
+  <div id="preloader" role="progressbar" aria-label="Loading site experience">
+    <div class="preloader-content">
+      <div class="preloader-logo">SEREN</div>
+      <div class="preloader-sub">Motu Tevairoa • French Polynesia</div>
+      <div class="preloader-progress-track">
+        <div class="preloader-progress-bar"></div>
+      </div>
+      <div class="preloader-percent">0%</div>
+    </div>
+  </div>
+
+  <!-- Adaptive Sticky/Fixed Header (Hide on scroll down, show on scroll up) -->
+  <header class="site-header nav--on-dark" id="site-header">
+    <div class="header-inner">
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#escape" class="nav-link active" data-path="escape">Escape</a>
+        <a href="#reef" class="nav-link" data-path="reef">Reef</a>
+        <a href="#villas" class="nav-link" data-path="villas">Villas</a>
+        <a href="#sunset" class="nav-link" data-path="sunset">Sunset</a>
+      </nav>
+
+      <a href="#escape" class="site-logo" aria-label="SEREN Island Resort Home">SEREN</a>
+
+      <div class="header-right">
+        <a href="#booking-section" class="btn-primary header-cta">Book Your Stay</a>
+        <div class="profile-avatar" aria-label="Guest Account">
+          <span class="material-symbols-outlined text-[18px]">person</span>
+        </div>
+        <button class="hamburger-btn" aria-label="Open mobile menu" type="button">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Fullscreen Navigation Overlay -->
+  <div class="mobile-menu-overlay" aria-label="Mobile Navigation">
+    <a href="#escape" class="nav-link">Escape</a>
+    <a href="#reef" class="nav-link">Reef</a>
+    <a href="#villas" class="nav-link">Villas</a>
+    <a href="#sunset" class="nav-link">Sunset</a>
+    <a href="#booking-section" class="btn-primary mobile-cta-btn" style="margin-top: 16px;">Book Your Stay</a>
+  </div>
+
+  <main>
+    <!-- ====================================================================
+         1. MAIN SCROLL SEQUENCE (900vh PINNED: SKY -> WATER -> REEF -> SUNSET)
+         ==================================================================== -->
+    <div class="sequence-wrapper" id="escape">
+      <div class="sequence-pinned-viewport">
+        <!-- Pinned WebP Canvas -->
+        <canvas id="sequence-canvas"></canvas>
+
+        <!-- Dynamic Color Grade Overlay -->
+        <div id="color-grade-overlay"></div>
+
+        <!-- Water Entry Flash Overlay -->
+        <div id="splash-flash-overlay"></div>
+
+        <!-- Underwater Particles Canvas -->
+        <canvas id="bubbles-canvas"></canvas>
+
+        <!-- Three.js 3D Low-Poly Underwater Scene -->
+        <canvas id="underwater-three-canvas"></canvas>
+
+        <!-- Sequence Overlays -->
+        <div class="sequence-overlay-content">
+          <!-- Marker 1: Hero (0 - 30%) -->
+          <div id="overlay-hero">
+            <div class="container hero-content-row">
+              <div class="hero-text-block">
+                <p class="hero-eyebrow">Motu Tevairoa • French Polynesia</p>
+                <h1 class="hero-title text-display-lg">Where the land lets go.</h1>
+              </div>
+              <div class="scroll-dive-hint">
+                <span class="text-label-lg">Scroll to dive</span>
+                <span class="material-symbols-outlined">arrow_downward</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marker 2 & 3: Underwater Experiences (37 - 65%) -->
+          <div id="overlay-underwater">
+            <div class="underwater-title-wrapper" id="reef">
+              <p class="underwater-eyebrow">01 — The Descent</p>
+              <h2 class="underwater-heading text-display-lg">Beneath the surface, time slows.</h2>
+            </div>
+
+            <!-- Horizontal Experiences Track -->
+            <div class="experiences-viewport">
+              <div class="experiences-track">
+                <!-- 01 Coral Reef -->
+                <article class="experience-card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="/images/coral-reef.jpg" alt="Vibrant untouched coral reef garden teeming with marine life" />
+                  </div>
+                  <div class="card-caustics"></div>
+                  <div class="card-gradient"></div>
+                  <div class="card-content">
+                    <span class="card-number">01</span>
+                    <h3 class="card-title">Coral Reef</h3>
+                    <p class="card-desc">Drift above untouched coral gardens teeming with lagoon life.</p>
+                  </div>
+                </article>
+
+                <!-- 02 Night Diving -->
+                <article class="experience-card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="/images/night-diving.jpg" alt="Bioluminescent night diving in deep ocean navy water" />
+                  </div>
+                  <div class="card-caustics"></div>
+                  <div class="card-gradient"></div>
+                  <div class="card-content">
+                    <span class="card-number">02</span>
+                    <h3 class="card-title">Night Diving</h3>
+                    <p class="card-desc">Witness bioluminescent trails under a canopy of stars.</p>
+                  </div>
+                </article>
+
+                <!-- 03 Ocean Spa -->
+                <article class="experience-card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="/images/ocean-spa.jpg" alt="Tranquil luxury oceanfront spa pavilion overlooking lagoon" />
+                  </div>
+                  <div class="card-caustics"></div>
+                  <div class="card-gradient"></div>
+                  <div class="card-content">
+                    <span class="card-number">03</span>
+                    <h3 class="card-title">Ocean Spa</h3>
+                    <p class="card-desc">Mineral hydrotherapy and volcanic stone rituals by the tide.</p>
+                  </div>
+                </article>
+
+                <!-- 04 Sea Dining -->
+                <article class="experience-card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="/images/sea-dining.jpg" alt="Candlelit luxury dining table set on private sandbank at twilight" />
+                  </div>
+                  <div class="card-caustics"></div>
+                  <div class="card-gradient"></div>
+                  <div class="card-content">
+                    <span class="card-number">04</span>
+                    <h3 class="card-title">Sea Dining</h3>
+                    <p class="card-desc">Line-caught tasting menus served barefoot at the water’s edge.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marker 5: Sunset (73 - 100%) -->
+          <div id="overlay-sunset">
+            <div class="sunset-time-pill" id="sunset">04:10 PM</div>
+            <h2 class="sunset-heading text-display-lg">Every day ends beautifully.</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         2. VILLAS SECTION (PINNED 3D SANCTUARIES)
+         ==================================================================== -->
+    <section id="villas-section">
+      <div class="villas-pinned-wrapper">
+        <div class="container" id="villas">
+          <div class="villas-header">
+            <div>
+              <p class="text-label-sm villas-eyebrow">Private Sanctuaries</p>
+              <h2 class="text-headline-lg" style="color: var(--color-on-surface);">The Villas</h2>
+            </div>
+            <p class="text-body-md villas-subtitle">
+              Handcrafted from local teak, coral stone, and woven pandanus to frame the horizon in complete privacy.
+            </p>
+          </div>
+
+          <div class="villas-perspective-container">
+            <!-- Overwater Villa -->
+            <article class="villa-card-3d active">
+              <div>
+                <div class="villa-card-img-wrap">
+                  <img src="/images/overwater-villa.jpg" alt="Architectural luxury overwater villa perched above lagoon" />
+                </div>
+                <p class="text-label-sm villa-tag">Lagoon Horizon</p>
+                <h3 class="text-headline-md villa-title">Overwater Villa</h3>
+                <p class="text-body-sm villa-desc">Suspended above the reef with a private plunge deck and direct lagoon ladder.</p>
+              </div>
+              <div class="villa-footer-row">
+                <div>
+                  <span class="villa-price-num">$1,850</span>
+                  <span class="villa-price-unit"> / night</span>
+                </div>
+                <a href="#booking-section" class="btn-primary villa-reserve-btn">Reserve</a>
+              </div>
+            </article>
+
+            <!-- Beach Villa -->
+            <article class="villa-card-3d dimmed">
+              <div>
+                <div class="villa-card-img-wrap">
+                  <img src="/images/beach-villa.jpg" alt="Luxury beachfront villa nestled among coconut palms" />
+                </div>
+                <p class="text-label-sm villa-tag">Powdered Cove</p>
+                <h3 class="text-headline-md villa-title">Beach Villa</h3>
+                <p class="text-body-sm villa-desc">Shaded by coconut palms with an open-air garden shower and private shoreline.</p>
+              </div>
+              <div class="villa-footer-row">
+                <div>
+                  <span class="villa-price-num">$1,450</span>
+                  <span class="villa-price-unit"> / night</span>
+                </div>
+                <a href="#booking-section" class="btn-primary villa-reserve-btn">Reserve</a>
+              </div>
+            </article>
+
+            <!-- Cliff Villa -->
+            <article class="villa-card-3d dimmed">
+              <div>
+                <div class="villa-card-img-wrap">
+                  <img src="/images/cliff-villa.jpg" alt="Cliffside villa carved into volcanic rock with infinity pool" />
+                </div>
+                <p class="text-label-sm villa-tag">Volcanic Ridge</p>
+                <h3 class="text-headline-md villa-title">Cliff Villa</h3>
+                <p class="text-body-sm villa-desc">Elevated above the surf with a cantilevered infinity pool and panoramic views.</p>
+              </div>
+              <div class="villa-footer-row">
+                <div>
+                  <span class="villa-price-num">$2,200</span>
+                  <span class="villa-price-unit"> / night</span>
+                </div>
+                <a href="#booking-section" class="btn-primary villa-reserve-btn">Reserve</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. BOOK CTA & WATER RIPPLE SECTION
+         ==================================================================== -->
+    <section id="booking-section">
+      <!-- WebGL Water Ripple Canvas -->
+      <div class="booking-ripple-canvas-container">
+        <canvas id="booking-ripple-canvas"></canvas>
+      </div>
+
+      <div class="container section-padding booking-content-container">
+        <div class="booking-header">
+          <p class="text-label-sm booking-eyebrow">Reservations</p>
+          <h2 class="text-display-lg booking-title">
+            <span class="mask-line">
+              <span class="mask-line-inner">Book your tide.</span>
+            </span>
+          </h2>
+        </div>
+
+        <form class="booking-widget-card" onsubmit="event.preventDefault(); alert('Reservation inquiry submitted. Our island concierge will contact you shortly.');">
+          <div class="input-group">
+            <label class="input-label" for="checkin">Check-in</label>
+            <div class="input-val-row">
+              <span id="checkin-val">Oct 14, 2025</span>
+              <span class="material-symbols-outlined">calendar_today</span>
+            </div>
+            <input type="date" id="checkin" value="2025-10-14" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkin-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="checkout">Check-out</label>
+            <div class="input-val-row">
+              <span id="checkout-val">Oct 21, 2025</span>
+              <span class="material-symbols-outlined">calendar_today</span>
+            </div>
+            <input type="date" id="checkout" value="2025-10-21" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkout-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="guests">Guests</label>
+            <div class="input-val-row">
+              <span id="guests-val">2 Adults</span>
+              <span class="material-symbols-outlined">expand_more</span>
+            </div>
+            <select id="guests" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('guests-val').textContent = this.value">
+              <option value="1 Adult">1 Adult</option>
+              <option value="2 Adults" selected>2 Adults</option>
+              <option value="3 Adults">3 Adults</option>
+              <option value="4 Adults">4 Adults</option>
+              <option value="Family (2+2)">Family (2+2)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="booking-submit-btn">
+            Check Availability
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       4. LUXURY FOOTER
+       ==================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand-title">SEREN</div>
+        <p class="text-body-sm footer-brand-desc">
+          Private Seaside Island Resort<br />
+          Motu Tevairoa, Bora Bora<br />
+          French Polynesia
+        </p>
+      </div>
+
+      <div>
+        <div class="text-label-sm footer-col-title">Contact</div>
+        <p class="text-body-sm footer-contact-info">
+          concierge@serenisland.com<br />
+          +689 40 60 31 00
+        </p>
+      </div>
+
+      <div>
+        <div class="text-label-sm footer-col-title">Connect</div>
+        <div class="social-links-row">
+          <a href="#" class="social-link-icon" aria-label="Website">
+            <span class="material-symbols-outlined text-[18px]">public</span>
+          </a>
+          <a href="#" class="social-link-icon" aria-label="Photography">
+            <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+          </a>
+          <a href="#" class="social-link-icon" aria-label="Inquiries">
+            <span class="material-symbols-outlined text-[18px]">mail</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript Bundle -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
