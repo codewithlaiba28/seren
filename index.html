@@ -3,27 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SEREN — Luxury Island Resort in Motu Tevairoa, Bora Bora, French Polynesia. Experience unhurried ocean sanctuaries, private overwater villas, and guided reef immersions." />
-  <title>SEREN — Luxury Island Resort | Bora Bora</title>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="theme-color" content="#04202e" />
+  
+  <title>SEREN — Luxury Island Resort | Bora Bora French Polynesia</title>
+  <meta name="description" content="Discover SEREN, an ultra-luxury private island resort in Motu Tevairoa, Bora Bora. Featuring pristine overwater villas, guided coral reef immersions, and ocean spa." />
+  <link rel="canonical" href="https://serenisland.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://serenisland.com/" />
+  <meta property="og:title" content="SEREN — Luxury Island Resort | Bora Bora French Polynesia" />
+  <meta property="og:description" content="Discover SEREN, an ultra-luxury private island resort in Motu Tevairoa, Bora Bora. Featuring pristine overwater villas, guided coral reef immersions, and ocean spa." />
+  <meta property="og:image" content="https://serenisland.com/images/hero-poster.webp" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://serenisland.com/" />
+  <meta name="twitter:title" content="SEREN — Luxury Island Resort | Bora Bora French Polynesia" />
+  <meta name="twitter:description" content="Discover SEREN, an ultra-luxury private island resort in Motu Tevairoa, Bora Bora. Featuring pristine overwater villas, guided coral reef immersions, and ocean spa." />
+  <meta name="twitter:image" content="https://serenisland.com/images/hero-poster.webp" />
+
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+
+  <!-- Preload Critical LCP Hero Poster -->
+  <link rel="preload" as="image" href="/images/hero-poster.webp" fetchpriority="high" type="image/webp" />
 
   <!-- Google Fonts strictly matching Stitch template tokens -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  
-  <!-- Material Symbols Outlined -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
 
   <!-- Master Stylesheet -->
   <link rel="stylesheet" href="/src/styles/main.css" />
+
+  <!-- JSON-LD Structured Data for Resort / Hotel -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Resort",
+    "name": "SEREN Luxury Island Resort",
+    "description": "Ultra-luxury seaside private island resort in Motu Tevairoa, Bora Bora, French Polynesia.",
+    "url": "https://serenisland.com",
+    "telephone": "+689 40 60 31 00",
+    "email": "concierge@serenisland.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Motu Tevairoa",
+      "addressLocality": "Bora Bora",
+      "addressRegion": "Leeward Islands",
+      "addressCountry": "PF"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -16.4833,
+      "longitude": -151.7667
+    },
+    "image": "https://serenisland.com/images/hero-poster.webp",
+    "priceRange": "$$$$"
+  }
+  </script>
 </head>
 <body class="bg-surface font-body text-body-md">
+
+  <!-- Accessible Skip to Content Link -->
+  <a href="#escape" class="skip-to-content">Skip to main content</a>
 
   <!-- Top Scroll Progress Line -->
   <div id="scroll-progress-bar" aria-hidden="true"></div>
 
   <!-- Luxury Preloader -->
-  <div id="preloader" role="progressbar" aria-label="Loading site experience">
+  <div id="preloader" role="progressbar" aria-label="Loading site experience" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
     <div class="preloader-content">
       <div class="preloader-logo">SEREN</div>
       <div class="preloader-sub">Motu Tevairoa • French Polynesia</div>
@@ -72,22 +126,25 @@
     <!-- ====================================================================
          1. MAIN SCROLL SEQUENCE (900vh PINNED: SKY -> WATER -> REEF -> SUNSET)
          ==================================================================== -->
-    <div class="sequence-wrapper" id="escape">
+    <section class="sequence-wrapper" id="escape" aria-label="Hero cinematic experience">
       <div class="sequence-pinned-viewport">
+        <!-- Instant LCP Poster Image -->
+        <img id="sequence-poster" src="/images/hero-poster.webp" alt="SEREN Bora Bora lagoon aerial view" fetchpriority="high" width="1440" height="810" />
+
         <!-- Pinned WebP Canvas -->
-        <canvas id="sequence-canvas"></canvas>
+        <canvas id="sequence-canvas" role="img" aria-label="Cinematic video sequence of Bora Bora lagoon, underwater reef immersion, and sunset villas"></canvas>
 
         <!-- Dynamic Color Grade Overlay -->
-        <div id="color-grade-overlay"></div>
+        <div id="color-grade-overlay" aria-hidden="true"></div>
 
         <!-- Water Entry Flash Overlay -->
-        <div id="splash-flash-overlay"></div>
+        <div id="splash-flash-overlay" aria-hidden="true"></div>
 
         <!-- Underwater Particles Canvas -->
-        <canvas id="bubbles-canvas"></canvas>
+        <canvas id="bubbles-canvas" aria-hidden="true"></canvas>
 
         <!-- Three.js 3D Low-Poly Underwater Scene -->
-        <canvas id="underwater-three-canvas"></canvas>
+        <canvas id="underwater-three-canvas" aria-hidden="true"></canvas>
 
         <!-- Sequence Overlays -->
         <div class="sequence-overlay-content">
@@ -118,10 +175,10 @@
                 <!-- 01 Coral Reef -->
                 <article class="experience-card">
                   <div class="card-img-wrapper">
-                    <img class="card-img" src="/images/coral-reef.jpg" alt="Vibrant untouched coral reef garden teeming with marine life" />
+                    <img class="card-img" src="/images/coral-reef.webp" alt="Vibrant untouched coral reef garden teeming with marine life" loading="lazy" decoding="async" width="360" height="480" />
                   </div>
-                  <div class="card-caustics"></div>
-                  <div class="card-gradient"></div>
+                  <div class="card-caustics" aria-hidden="true"></div>
+                  <div class="card-gradient" aria-hidden="true"></div>
                   <div class="card-content">
                     <span class="card-number">01</span>
                     <h3 class="card-title">Coral Reef</h3>
@@ -132,10 +189,10 @@
                 <!-- 02 Night Diving -->
                 <article class="experience-card">
                   <div class="card-img-wrapper">
-                    <img class="card-img" src="/images/night-diving.jpg" alt="Bioluminescent night diving in deep ocean navy water" />
+                    <img class="card-img" src="/images/night-diving.webp" alt="Bioluminescent night diving in deep ocean navy water" loading="lazy" decoding="async" width="360" height="480" />
                   </div>
-                  <div class="card-caustics"></div>
-                  <div class="card-gradient"></div>
+                  <div class="card-caustics" aria-hidden="true"></div>
+                  <div class="card-gradient" aria-hidden="true"></div>
                   <div class="card-content">
                     <span class="card-number">02</span>
                     <h3 class="card-title">Night Diving</h3>
@@ -146,10 +203,10 @@
                 <!-- 03 Ocean Spa -->
                 <article class="experience-card">
                   <div class="card-img-wrapper">
-                    <img class="card-img" src="/images/ocean-spa.jpg" alt="Tranquil luxury oceanfront spa pavilion overlooking lagoon" />
+                    <img class="card-img" src="/images/ocean-spa.webp" alt="Tranquil luxury oceanfront spa pavilion overlooking lagoon" loading="lazy" decoding="async" width="360" height="480" />
                   </div>
-                  <div class="card-caustics"></div>
-                  <div class="card-gradient"></div>
+                  <div class="card-caustics" aria-hidden="true"></div>
+                  <div class="card-gradient" aria-hidden="true"></div>
                   <div class="card-content">
                     <span class="card-number">03</span>
                     <h3 class="card-title">Ocean Spa</h3>
@@ -160,10 +217,10 @@
                 <!-- 04 Sea Dining -->
                 <article class="experience-card">
                   <div class="card-img-wrapper">
-                    <img class="card-img" src="/images/sea-dining.jpg" alt="Candlelit luxury dining table set on private sandbank at twilight" />
+                    <img class="card-img" src="/images/sea-dining.webp" alt="Candlelit luxury dining table set on private sandbank at twilight" loading="lazy" decoding="async" width="360" height="480" />
                   </div>
-                  <div class="card-caustics"></div>
-                  <div class="card-gradient"></div>
+                  <div class="card-caustics" aria-hidden="true"></div>
+                  <div class="card-gradient" aria-hidden="true"></div>
                   <div class="card-content">
                     <span class="card-number">04</span>
                     <h3 class="card-title">Sea Dining</h3>
@@ -181,12 +238,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- ====================================================================
          2. VILLAS SECTION (PINNED 3D SANCTUARIES)
          ==================================================================== -->
-    <section id="villas-section">
+    <section id="villas-section" aria-label="Luxury villas collection">
       <div class="villas-pinned-wrapper">
         <div class="container" id="villas">
           <div class="villas-header">
@@ -204,7 +261,7 @@
             <article class="villa-card-3d active">
               <div>
                 <div class="villa-card-img-wrap">
-                  <img src="/images/overwater-villa.jpg" alt="Architectural luxury overwater villa perched above lagoon" />
+                  <img src="/images/overwater-villa.webp" alt="Architectural luxury overwater villa perched above lagoon" loading="lazy" decoding="async" width="360" height="240" />
                 </div>
                 <p class="text-label-sm villa-tag">Lagoon Horizon</p>
                 <h3 class="text-headline-md villa-title">Overwater Villa</h3>
@@ -223,7 +280,7 @@
             <article class="villa-card-3d dimmed">
               <div>
                 <div class="villa-card-img-wrap">
-                  <img src="/images/beach-villa.jpg" alt="Luxury beachfront villa nestled among coconut palms" />
+                  <img src="/images/beach-villa.webp" alt="Luxury beachfront villa nestled among coconut palms" loading="lazy" decoding="async" width="360" height="240" />
                 </div>
                 <p class="text-label-sm villa-tag">Powdered Cove</p>
                 <h3 class="text-headline-md villa-title">Beach Villa</h3>
@@ -242,7 +299,7 @@
             <article class="villa-card-3d dimmed">
               <div>
                 <div class="villa-card-img-wrap">
-                  <img src="/images/cliff-villa.jpg" alt="Cliffside villa carved into volcanic rock with infinity pool" />
+                  <img src="/images/cliff-villa.webp" alt="Cliffside villa carved into volcanic rock with infinity pool" loading="lazy" decoding="async" width="360" height="240" />
                 </div>
                 <p class="text-label-sm villa-tag">Volcanic Ridge</p>
                 <h3 class="text-headline-md villa-title">Cliff Villa</h3>
@@ -264,9 +321,9 @@
     <!-- ====================================================================
          3. BOOK CTA & WATER RIPPLE SECTION
          ==================================================================== -->
-    <section id="booking-section">
+    <section id="booking-section" aria-label="Island reservations and inquiry">
       <!-- WebGL Water Ripple Canvas -->
-      <div class="booking-ripple-canvas-container">
+      <div class="booking-ripple-canvas-container" aria-hidden="true">
         <canvas id="booking-ripple-canvas"></canvas>
       </div>
 
@@ -280,32 +337,32 @@
           </h2>
         </div>
 
-        <form class="booking-widget-card" onsubmit="event.preventDefault(); alert('Reservation inquiry submitted. Our island concierge will contact you shortly.');">
+        <form class="booking-widget-card" aria-label="Reservation availability form" onsubmit="event.preventDefault(); alert('Reservation inquiry submitted. Our island concierge will contact you shortly.');">
           <div class="input-group">
             <label class="input-label" for="checkin">Check-in</label>
             <div class="input-val-row">
               <span id="checkin-val">Oct 14, 2025</span>
-              <span class="material-symbols-outlined">calendar_today</span>
+              <span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>
             </div>
-            <input type="date" id="checkin" value="2025-10-14" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkin-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
+            <input type="date" id="checkin" aria-label="Check-in date" value="2025-10-14" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkin-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
           </div>
 
           <div class="input-group">
             <label class="input-label" for="checkout">Check-out</label>
             <div class="input-val-row">
               <span id="checkout-val">Oct 21, 2025</span>
-              <span class="material-symbols-outlined">calendar_today</span>
+              <span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>
             </div>
-            <input type="date" id="checkout" value="2025-10-21" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkout-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
+            <input type="date" id="checkout" aria-label="Check-out date" value="2025-10-21" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('checkout-val').textContent = new Date(this.value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })" />
           </div>
 
           <div class="input-group">
             <label class="input-label" for="guests">Guests</label>
             <div class="input-val-row">
               <span id="guests-val">2 Adults</span>
-              <span class="material-symbols-outlined">expand_more</span>
+              <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
             </div>
-            <select id="guests" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('guests-val').textContent = this.value">
+            <select id="guests" aria-label="Number of guests" style="opacity:0; position:absolute; inset:0; cursor:pointer;" onchange="document.getElementById('guests-val').textContent = this.value">
               <option value="1 Adult">1 Adult</option>
               <option value="2 Adults" selected>2 Adults</option>
               <option value="3 Adults">3 Adults</option>
@@ -314,7 +371,7 @@
             </select>
           </div>
 
-          <button type="submit" class="booking-submit-btn">
+          <button type="submit" class="booking-submit-btn" aria-label="Check availability for selected dates">
             Check Availability
           </button>
         </form>
@@ -325,7 +382,7 @@
   <!-- ====================================================================
        4. LUXURY FOOTER
        ==================================================================== -->
-  <footer class="site-footer">
+  <footer class="site-footer" role="contentinfo">
     <div class="container footer-grid">
       <div>
         <div class="footer-brand-title">SEREN</div>
@@ -347,14 +404,14 @@
       <div>
         <div class="text-label-sm footer-col-title">Connect</div>
         <div class="social-links-row">
-          <a href="#" class="social-link-icon" aria-label="Website">
-            <span class="material-symbols-outlined text-[18px]">public</span>
+          <a href="#" class="social-link-icon" aria-label="Visit SEREN global website">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">public</span>
           </a>
-          <a href="#" class="social-link-icon" aria-label="Photography">
-            <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+          <a href="#" class="social-link-icon" aria-label="View resort photography gallery">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">photo_camera</span>
           </a>
-          <a href="#" class="social-link-icon" aria-label="Inquiries">
-            <span class="material-symbols-outlined text-[18px]">mail</span>
+          <a href="#" class="social-link-icon" aria-label="Send concierge direct email inquiry">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">mail</span>
           </a>
         </div>
       </div>
