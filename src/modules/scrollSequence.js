@@ -1,14 +1,14 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwaterThree) {
+export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwaterThree, frameController) {
   const canvas = document.getElementById('sequence-canvas');
-  if (!canvas || !loadedFrames || loadedFrames.length === 0) return;
+  const poster = document.getElementById('sequence-poster');
+  if (!canvas || !loadedFrames) return;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: false });
   const container = document.querySelector('.sequence-pinned-viewport');
   const colorOverlay = document.getElementById('color-grade-overlay');
   const splashOverlay = document.getElementById('splash-flash-overlay');
@@ -23,34 +23,53 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
   const timePill = document.querySelector('.sunset-time-pill');
   const sunsetHeading = document.querySelector('.sunset-heading');
 
-  // SplitType on sunset heading
+  // Lightweight, zero-dependency word splitter for sunset heading
   let splitWords = [];
   if (sunsetHeading) {
-    const split = new SplitType(sunsetHeading, { types: 'words' });
-    splitWords = split.words || [];
-    // Set initial word state
-    gsap.set(splitWords, { opacity: 0, y: 30 });
+    const rawText = sunsetHeading.innerText.trim();
+    sunsetHeading.innerHTML = rawText
+      .split(/\s+/)
+      .map((w) => `<span class="word">${w}</span>`)
+      .join(' ');
+    splitWords = Array.from(sunsetHeading.querySelectorAll('.word'));
+    gsap.set(splitWords, { opacity: 0, y: 25 });
   }
 
-  // Canvas size management
+  // Canvas size management with DPR capped at 2
+  let dpr = 1;
   function resizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    renderFrame(currentFrameIndex);
+    if (ctx) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+    }
+    needsRedraw = true;
   }
 
-  let currentFrameIndex = 0;
+  let currentFrameIndex = -1;
+  let targetFrameIndex = 0;
+  let needsRedraw = true;
+  let rAFScheduled = false;
+
   function renderFrame(index) {
-    currentFrameIndex = Math.max(0, Math.min(totalFrames - 1, index));
-    const img = loadedFrames[currentFrameIndex];
+    const clampedIndex = Math.max(0, Math.min(totalFrames - 1, index));
+    
+    // Find closest loaded frame if requested frame is still decoding
+    let frameToDraw = clampedIndex;
+    while (frameToDraw > 0 && !loadedFrames[frameToDraw]) {
+      frameToDraw--;
+    }
+
+    const img = loadedFrames[frameToDraw];
     if (!img) return;
 
     const cw = canvas.width;
     const ch = canvas.height;
-    const imgRatio = img.width / img.height;
+    const imgW = img.width;
+    const imgH = img.height;
+    const imgRatio = imgW / imgH;
     const canvasRatio = cw / ch;
 
     let rw, rh, ox, oy;
@@ -66,14 +85,40 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
       oy = 0;
     }
 
-    ctx.clearRect(0, 0, cw, ch);
     ctx.drawImage(img, ox, oy, rw, rh);
+    currentFrameIndex = clampedIndex;
+
+    // Hide initial poster once first canvas frame is drawn
+    if (poster && poster.style.opacity !== '0') {
+      poster.style.opacity = '0';
+      poster.style.pointerEvents = 'none';
+    }
   }
 
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
+  function scheduleDraw(target) {
+    targetFrameIndex = target;
+    if (targetFrameIndex !== currentFrameIndex) {
+      needsRedraw = true;
+    }
+    if (!rAFScheduled) {
+      rAFScheduled = true;
+      requestAnimationFrame(() => {
+        rAFScheduled = false;
+        if (needsRedraw) {
+          renderFrame(targetFrameIndex);
+          needsRedraw = false;
+        }
+      });
+    }
+  }
 
-  // Initial render first frame
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    scheduleDraw(currentFrameIndex >= 0 ? currentFrameIndex : 0);
+  }, { passive: true });
+
+  resizeCanvas();
+  // Draw first frame immediately
   renderFrame(0);
 
   let hasShaken = false;
@@ -97,39 +142,36 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
     onUpdate: (self) => {
       const progress = self.progress;
 
-      // 1. Scrub frames based on scroll progress
+      // 1. Scrub frames strictly via rAF on change with JIT buffering
       const targetFrame = Math.round(progress * (totalFrames - 1));
-      renderFrame(targetFrame);
+      if (frameController) {
+        const isMobile = window.innerWidth <= 768;
+        frameController.ensureRange(targetFrame - 3, targetFrame + (isMobile ? 12 : 25));
+        if (isMobile) {
+          frameController.releaseFar(targetFrame, 25);
+        }
+      }
+      scheduleDraw(targetFrame);
 
       // 2. Color Grade Overlay Animation
-      // 0 - 30%: bright and warm
-      // 30 - 37%: transition to deep teal
-      // 37 - 65%: deep teal
-      // 65 - 73%: transition to sunset
-      // 73 - 100%: orange-pink sunset
       if (colorOverlay) {
         if (progress < 0.30) {
-          // Warm golden daylight tint
           colorOverlay.style.backgroundColor = 'rgba(255, 230, 200, 0.08)';
           colorOverlay.style.filter = 'contrast(1.02) saturate(1.05)';
         } else if (progress >= 0.30 && progress < 0.37) {
-          // Blend into deep teal
           const t = (progress - 0.30) / 0.07;
           colorOverlay.style.backgroundColor = `rgba(0, ${Math.round(40 + t * 40)}, ${Math.round(50 + t * 45)}, ${0.1 + t * 0.35})`;
           colorOverlay.style.filter = `contrast(${1.02 + t * 0.08}) saturate(${1.05 - t * 0.15})`;
         } else if (progress >= 0.37 && progress < 0.65) {
-          // Underwater deep teal
           colorOverlay.style.backgroundColor = 'rgba(0, 80, 95, 0.42)';
           colorOverlay.style.filter = 'contrast(1.1) saturate(0.9) hue-rotate(-5deg)';
         } else if (progress >= 0.65 && progress < 0.73) {
-          // Transition from teal to sunset
           const t = (progress - 0.65) / 0.08;
-          colorOverlay.style.backgroundColor = `rgba(${Math.round(t * 219)}, ${Math.round(80 * (1 - t) + 95 * t * 0.4)}, ${Math.round(95 * (1 - t) + 64 * t * 0.5)}, ${0.42 - t * 0.15})`;
+          colorOverlay.style.backgroundColor = `rgba(${Math.round(t * 196)}, ${Math.round(80 * (1 - t) + 67 * t * 0.4)}, ${Math.round(95 * (1 - t) + 34 * t * 0.5)}, ${0.42 - t * 0.15})`;
           colorOverlay.style.filter = `contrast(${1.1 - t * 0.05}) saturate(${0.9 + t * 0.35})`;
         } else {
-          // Sunset: orange-pink glow
           const t = (progress - 0.73) / 0.27;
-          colorOverlay.style.backgroundColor = `rgba(219, 95, 64, ${0.28 + t * 0.12})`;
+          colorOverlay.style.backgroundColor = `rgba(196, 67, 34, ${0.28 + t * 0.12})`;
           colorOverlay.style.filter = `contrast(1.08) saturate(1.25) hue-rotate(5deg)`;
         }
       }
@@ -137,7 +179,6 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
       // 3. Water Entry Effect (30 - 37%)
       if (progress >= 0.30 && progress <= 0.37) {
         const entryP = (progress - 0.30) / 0.07;
-        // White flash peaks at ~0.33, then rapidly fades
         if (splashOverlay) {
           if (entryP < 0.4) {
             splashOverlay.style.opacity = (entryP / 0.4) * 0.85;
@@ -146,7 +187,6 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
           }
         }
 
-        // Camera shake trigger
         if (!hasShaken && entryP > 0.2) {
           hasShaken = true;
           if (container) {
@@ -166,7 +206,7 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
               }
             );
           }
-          if (bubbles) bubbles.burst(window.innerWidth <= 768 ? 30 : 60);
+          if (bubbles) bubbles.burst(window.innerWidth <= 768 ? 25 : 50);
         }
       } else {
         if (splashOverlay) splashOverlay.style.opacity = '0';
@@ -187,8 +227,7 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
         underwaterAlpha = 0;
       }
 
-      const bubblesCanvas = document.getElementById('bubbles-canvas');
-      if (bubblesCanvas) bubblesCanvas.style.opacity = underwaterAlpha;
+      if (bubbles && typeof bubbles.setOpacity === 'function') bubbles.setOpacity(underwaterAlpha);
       if (underwaterThree) underwaterThree.setOpacity(underwaterAlpha);
 
       // 4. Progress Marker 1: Hero (0 - 30%)
@@ -202,7 +241,6 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
         }
       }
 
-      // "Scroll to dive" hint fades out after first scroll
       if (scrollDiveHint) {
         if (progress > 0.04) {
           scrollDiveHint.style.opacity = '0';
@@ -241,7 +279,6 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
         const currentShift = trackProgress * maxShift;
         experiencesTrack.style.transform = `translate3d(${-currentShift}px, 0, 0)`;
 
-        // Image Parallax within cards
         experienceCardImgs.forEach((img) => {
           const parallaxX = (trackProgress - 0.5) * 40;
           img.style.transform = `scale(1.12) translate3d(${parallaxX}px, 0, 0)`;
@@ -262,7 +299,6 @@ export function initScrollSequence(loadedFrames, totalFrames, bubbles, underwate
         // Sunset Time Counting: 04:10 PM to 06:42 PM
         if (progress >= 0.72 && timePill) {
           const t = Math.max(0, Math.min(1, (progress - 0.72) / 0.28));
-          // 04:10 PM = 970 mins, 06:42 PM = 1122 mins
           const totalMins = Math.round(970 + t * (1122 - 970));
           const h = Math.floor(totalMins / 60);
           const m = totalMins % 60;
