@@ -2,3 +2,7 @@ node_modules/
 dist/
 .DS_Store
 *.log
+screenshot-*.png
+baseline-lighthouse.json
+optimized-lighthouse.json
+stats.html
