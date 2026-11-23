@@ -60,6 +60,15 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+// Tab visibility optimization
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    gsap.ticker.sleep();
+  } else {
+    gsap.ticker.wake();
+  }
+});
+
 // DOMContentLoaded lifecycle
 document.addEventListener('DOMContentLoaded', async () => {
   // Initialize Adaptive Navbar (hide on scroll down, show on scroll up)
@@ -69,10 +78,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   bubblesInstance = initBubblesCanvas();
   underwaterThreeInstance = initUnderwaterThree();
 
-  // Preloader preloads all video frames & background images
-  await initPreloader(lenis, (loadedFrames, totalFrames) => {
+  // Preloader preloads critical initial batch & delegates progressive loader
+  await initPreloader(lenis, (loadedFrames, totalFrames, frameController) => {
     // Initialize in strict DOM order for clean ScrollTrigger pin spacing
-    initScrollSequence(loadedFrames, totalFrames, bubblesInstance, underwaterThreeInstance);
+    initScrollSequence(loadedFrames, totalFrames, bubblesInstance, underwaterThreeInstance, frameController);
     initVillasSection();
     initWaterRipple();
 
